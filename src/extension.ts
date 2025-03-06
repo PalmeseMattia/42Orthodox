@@ -5,8 +5,6 @@ function generateOrthodoxClass(className: string): string {
 `#ifndef ${className.toUpperCase()}_HPP
 #define ${className.toUpperCase()}_HPP
 
-#include <iostream>
-
 class ${className} {
 public:
     // Default Constructor
