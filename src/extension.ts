@@ -32,7 +32,9 @@ async function createFileInFolder(fileName : string) {
 		vscode.window.showErrorMessage('No open folder!');
 		return ;
 	}
-    const folderUri = vscode.workspace.workspaceFolders[0].uri;
+    const folderUri = vscode.window.activeTextEditor 
+		? vscode.Uri.joinPath(vscode.window.activeTextEditor.document.uri, "..")
+		: vscode.workspace.workspaceFolders[0].uri;
     const fileUri = vscode.Uri.joinPath(folderUri, fileName + ".hpp");
     const content = Buffer.from(generateOrthodoxClass(fileName));
 
