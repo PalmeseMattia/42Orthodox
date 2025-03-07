@@ -3,9 +3,10 @@ import * as vscode from 'vscode';
 function generateOrthodoxClass(className: string): string {
     return (
 `#ifndef ${className.toUpperCase()}_HPP
-#define ${className.toUpperCase()}_HPP
+# define ${className.toUpperCase()}_HPP
 
-class ${className} {
+class ${className}
+{
 public:
     // Default Constructor
     ${className}();
