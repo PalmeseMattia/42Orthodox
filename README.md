@@ -1,0 +1,1 @@
+To use the extension, launch the `Generate Class` command (`Ctrl+Shift+P` + `Generate Class`), write the name of the class and press Enter.
