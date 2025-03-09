@@ -5,6 +5,8 @@ function generateOrthodoxClass(className: string): string {
 `#ifndef ${className.toUpperCase()}_HPP
 # define ${className.toUpperCase()}_HPP
 
+# include <iostream>
+
 class ${className}
 {
 public:
@@ -25,6 +27,37 @@ public:
 `);
 }
 
+function generateOrthodoxClassCpp(className: string): string {
+    return `#include "${className}.hpp"
+
+// Default Constructor
+${className}::${className}() {
+    std::cout << "${className} default constructor called" << std::endl;
+}
+
+// Copy Constructor
+${className}::${className}(const ${className}& other) {
+    std::cout << "${className} copy constructor called" << std::endl;
+    *this = other;
+}
+
+// Copy Assignment Operator
+${className}& ${className}::operator=(const ${className}& other) {
+    std::cout << "${className} copy assignment operator called" << std::endl;
+    if (this != &other) {
+        // Copy attributes here
+    }
+    return *this;
+}
+
+// Destructor
+${className}::~${className}() {
+    std::cout << "${className} destructor called" << std::endl;
+}
+`;
+}
+
+
 async function createFileInFolder(fileName : string) {
 	if (vscode.workspace.workspaceFolders === undefined 
 		|| vscode.workspace.workspaceFolders?.length === 0) {
@@ -34,11 +67,14 @@ async function createFileInFolder(fileName : string) {
     const folderUri = vscode.window.activeTextEditor 
 		? vscode.Uri.joinPath(vscode.window.activeTextEditor.document.uri, "..")
 		: vscode.workspace.workspaceFolders[0].uri;
-    const fileUri = vscode.Uri.joinPath(folderUri, fileName + ".hpp");
-    const content = Buffer.from(generateOrthodoxClass(fileName));
+    const hppFileUri = vscode.Uri.joinPath(folderUri, fileName + ".hpp");
+	const cppFileUri = vscode.Uri.joinPath(folderUri, fileName + ".cpp");
+	const hppContent = Buffer.from(generateOrthodoxClass(fileName));
+	const cppContent = Buffer.from(generateOrthodoxClassCpp(fileName));
 
     try {
-        await vscode.workspace.fs.writeFile(fileUri, content);
+        await vscode.workspace.fs.writeFile(hppFileUri, hppContent);
+		await vscode.workspace.fs.writeFile(cppFileUri, cppContent);
     } catch (error : any) {
         vscode.window.showErrorMessage('Error creating the file: ' + error);
     }
